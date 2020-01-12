@@ -13,12 +13,16 @@ def generate_dataset():
     batch_x = np.linspace(0, 2, 100)
     batch_y = 1.5 * batch_x + np.random.randn(*batch_x.shape) * 0.3 + 0.6
 
-    show_data(batch_x, batch_y)
+    show_data(batch_x, batch_y, name="Generated Data")
     return batch_x, batch_y
 
 
-def show_data(x, y):
-    plt.plot(x, y, 'bo', "Generated Data")
+def show_data(x, y, y_pred_b=None, name=None):
+    plt.plot(x, y, 'bo', label=name)
+    if y_pred_b is not None:
+        plt.plot(x, y_pred_b, color="red", label="Fitted Line")
+    plt.xlim(0, 2)
+    plt.ylim(0, 4)
     plt.legend()
     plt.show()
 
@@ -55,11 +59,7 @@ def run_linear_regression():
         print('Predicting')
         y_pred_batch = session.run(y_pred, {x: x_batch})
 
-    plt.scatter(x_batch, y_batch)
-    plt.plot(x_batch, y_pred_batch, color='red')
-    plt.xlim(0, 2)
-    plt.ylim(0, 4)
-    plt.show()
+    show_data(x_batch, y_batch, y_pred_batch, name="Testing Data")
     # plt.savefig('plot.png')
 
 
