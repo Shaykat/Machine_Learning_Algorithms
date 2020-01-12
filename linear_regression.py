@@ -11,10 +11,12 @@ learning_rate = .01
 
 def generate_dataset():
     batch_x = np.linspace(0, 2, 100)
+    batch_x_test = np.linspace(0, 2, 100)
     batch_y = 1.5 * batch_x + np.random.randn(*batch_x.shape) * 0.3 + 0.6
+    batch_y_test = 1.5 * batch_x_test + np.random.randn(*batch_x_test.shape) * 0.4 + 0.6
 
     show_data(batch_x, batch_y, name="Generated Data")
-    return batch_x, batch_y
+    return batch_x, batch_y, batch_x_test, batch_y_test
 
 
 def show_data(x, y, y_pred_b=None, name=None):
@@ -42,7 +44,7 @@ def linear_regression():
 
 
 def run_linear_regression():
-    x_batch, y_batch = generate_dataset()
+    x_batch, y_batch, x_batch_test, y_batch_test = generate_dataset()
     x, y, y_pred, loss = linear_regression()
 
     optimizer = tf.train.GradientDescentOptimizer(learning_rate)
@@ -57,9 +59,9 @@ def run_linear_regression():
             print(i, "loss:", loss.eval(feed_dict))
 
         print('Predicting')
-        y_pred_batch = session.run(y_pred, {x: x_batch})
+        y_pred_batch = session.run(y_pred, {x: x_batch_test})
 
-    show_data(x_batch, y_batch, y_pred_batch, name="Testing Data")
+    show_data(x_batch_test, y_batch_test, y_pred_batch, name="Testing Data")
     # plt.savefig('plot.png')
 
 
