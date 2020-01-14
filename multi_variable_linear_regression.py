@@ -8,7 +8,7 @@ tf.disable_v2_behavior()
 
 num_epoch = 200
 learning_rate = .1
-n = 3
+n = 2
 
 
 """Data Set is downloaded from Kaggle"""
@@ -16,7 +16,7 @@ n = 3
 
 
 def import_dataset():
-    data = np.array(pd.read_csv("real_estate.csv", header=None).values)
+    data = np.array(pd.read_csv("./data/real_estate.csv", header=None).values)
     new_data = data[1:, 0:].astype(np.float32)
     print(data.shape)
 
@@ -25,8 +25,8 @@ def import_dataset():
     new_data[:, 2:3] = (float(data_2.max(axis=0)[0]) - data_2) / float(data_2.max(axis=0)[0])
     new_data[:, 3:4] = (float(data_3.max(axis=0)[0]) - data_3) / float(data_3.max(axis=0)[0])
 
-    batch_x_train = new_data[0:302, 2:5].transpose()
-    batch_x_test = new_data[302:, 2:5].transpose()
+    batch_x_train = new_data[0:302, 3:5].transpose()
+    batch_x_test = new_data[302:, 3:5].transpose()
     batch_y_train = new_data[0:302, 7:].transpose()
     batch_y_test = new_data[302:, 7:].transpose()
 
@@ -55,7 +55,7 @@ def linear_regression(m, d):
         b = tf.get_variable("b", shape=())
 
         # Model Output
-        y_predc = tf.matmul(w, x_scaled) + b
+        y_predc = tf.matmul(w, x) + b
 
         loss = tf.reduce_sum(tf.square(y_predc - y))
     return x, y, y_predc, loss
@@ -63,7 +63,6 @@ def linear_regression(m, d):
 
 def run_linear_regression():
     x_batch, y_batch, x_batch_test, y_batch_test = import_dataset()
-    n = x_batch.shape[0]-2
     means = x_batch.mean(axis=1)
     deviations = x_batch.std(axis=1)
     x, y, y_pred, loss = linear_regression(means, deviations)
@@ -81,6 +80,9 @@ def run_linear_regression():
 
         print('Predicting')
         y_pred_batch = session.run(y_pred, {x: x_batch_test})
+        loss_test = np.sqrt(np.square(y_pred_batch - y_batch_test)/y_batch_test.shape[1])
+
+        print(i, "Test loss:", np.mean(loss_test))
 
     # show_data(x_batch_test, y_batch_test, y_pred_batch, name="Testing Data")
     # plt.savefig('plot.png')
