@@ -1,7 +1,7 @@
 # Machine_Learning_Algorithms
 Linear Regression, Multi Variable Linear Regression, Feature Selection, Polynomial Regression, Gradient Descent, Dataset creation and Normalization
 
-# To run this code............................#
+# To run this code............................
 
 # Step 1
 Initialize git in a directory ... $git init
