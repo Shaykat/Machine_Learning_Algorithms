@@ -20,3 +20,4 @@ Now inside the virtual environment install python 3.7 and other required package
 
 # Step 5
 If the IDE you are using is pycharm, then you can just assign the file you want to run in the configuration section and select the virtual environment you created or you can create virtual environment from pycharm also.
+![](image/config.png)
