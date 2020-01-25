@@ -84,9 +84,6 @@ def run_linear_regression():
 
         print(i, "Test loss:", np.mean(loss_test))
 
-    # show_data(x_batch_test, y_batch_test, y_pred_batch, name="Testing Data")
-    # plt.savefig('plot.png')
-
 
 if __name__ == "__main__":
     run_linear_regression()
