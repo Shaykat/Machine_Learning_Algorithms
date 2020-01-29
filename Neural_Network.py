@@ -1,14 +1,10 @@
-# Package imports
 import numpy as np
 import matplotlib.pyplot as plt
 import sklearn.linear_model
-from utils import load_planar_dataset, plot_decision_boundary, sigmoid
-from test_cases import layer_sizes_test_case, initialize_parameters_test_case, forward_propagation_test_case, \
-    compute_cost_test_case, backward_propagation_test_case, update_parameters_test_case, nn_model_test_case, \
-    predict_test_case
+from utils import *
+from test_cases import *
 
 np.random.seed(1)
-
 X, Y = load_planar_dataset()
 
 # Visualize the data:
@@ -19,68 +15,19 @@ shape_X = X.shape
 shape_Y = Y.shape
 m = shape_X[1]  # training set size
 
-print ('The shape of X is: ' + str(shape_X))
-print ('The shape of Y is: ' + str(shape_Y))
-print ('I have m = %d training examples!' % (m))
+print('The shape of X is: ' + str(shape_X))
+print('The shape of Y is: ' + str(shape_Y))
+print('I have m = %d training examples!' % (m))
 
-
-# Train the logistic regression classifier
-clf = sklearn.linear_model.LogisticRegressionCV();
-clf.fit(X.T, Y.T);
-
-
-# Plot the decision boundary for logistic regression
-plot_decision_boundary(lambda x: clf.predict(x), X, Y)
-plt.title("Logistic Regression")
-
-# Print accuracy
-LR_predictions = clf.predict(X.T)
-print ('Accuracy of logistic regression: %d ' % float((np.dot(Y,LR_predictions) + np.dot(1-Y,1-LR_predictions))/float(Y.size)*100) +
-       '% ' + "(percentage of correctly labelled datapoints)")
-
-
-# GRADED FUNCTION: layer_sizes
 
 def layer_sizes(X, Y):
-    """
-    Arguments:
-    X -- input dataset of shape (input size, number of examples)
-    Y -- labels of shape (output size, number of examples)
-
-    Returns:
-    n_x -- the size of the input layer
-    n_h -- the size of the hidden layer
-    n_y -- the size of the output layer
-    """
     n_x = X.shape[0]  # size of input layer
     n_h = 4
     n_y = Y.shape[0]  # size of output layer
     return (n_x, n_h, n_y)
 
 
-X_assess, Y_assess = layer_sizes_test_case()
-(n_x, n_h, n_y) = layer_sizes(X_assess, Y_assess)
-print("The size of the input layer is: n_x = " + str(n_x))
-print("The size of the hidden layer is: n_h = " + str(n_h))
-print("The size of the output layer is: n_y = " + str(n_y))
-
-
-# GRADED FUNCTION: initialize_parameters
 def initialize_parameters(n_x, n_h, n_y):
-    """
-    Argument:
-    n_x -- size of the input layer
-    n_h -- size of the hidden layer
-    n_y -- size of the output layer
-
-    Returns:
-    params -- python dictionary containing your parameters:
-                    W1 -- weight matrix of shape (n_h, n_x)
-                    b1 -- bias vector of shape (n_h, 1)
-                    W2 -- weight matrix of shape (n_y, n_h)
-                    b2 -- bias vector of shape (n_y, 1)
-    """
-
     np.random.seed(2)  # we set up a seed so that your output matches ours although the initialization is random.
     W1 = np.random.rand(n_h, n_x)
     b1 = np.zeros((n_h, 1))
@@ -100,26 +47,7 @@ def initialize_parameters(n_x, n_h, n_y):
     return parameters
 
 
-n_x, n_h, n_y = initialize_parameters_test_case()
-
-parameters = initialize_parameters(n_x, n_h, n_y)
-print("W1 = " + str(parameters["W1"]))
-print("b1 = " + str(parameters["b1"]))
-print("W2 = " + str(parameters["W2"]))
-print("b2 = " + str(parameters["b2"]))
-
-
-# GRADED FUNCTION: forward_propagation
 def forward_propagation(X, parameters):
-    """
-    Argument:
-    X -- input data of size (n_x, m)
-    parameters -- python dictionary containing your parameters (output of initialization function)
-
-    Returns:
-    A2 -- The sigmoid output of the second activation
-    cache -- a dictionary containing "Z1", "A1", "Z2" and "A2"
-    """
     # Retrieve each parameter from the dictionary "parameters"
     W1 = parameters["W1"]
     b1 = parameters["b1"]
@@ -142,34 +70,7 @@ def forward_propagation(X, parameters):
     return A2, cache
 
 
-X_assess, parameters = forward_propagation_test_case()
-A2, cache = forward_propagation(X_assess, parameters)
-
-# Note: we use the mean here just to make sure that your output matches ours.
-print(np.mean(cache['Z1']) ,np.mean(cache['A1']),np.mean(cache['Z2']),np.mean(cache['A2']))
-
-
-# GRADED FUNCTION: compute_cost
 def compute_cost(A2, Y, parameters):
-    """
-    Computes the cross-entropy cost given in equation (13)
-
-    Arguments:
-    A2 -- The sigmoid output of the second activation, of shape (1, number of examples)
-    Y -- "true" labels vector of shape (1, number of examples)
-    parameters -- python dictionary containing your parameters W1, b1, W2 and b2
-    [Note that the parameters argument is not used in this function,
-    but the auto-grader currently expects this parameter.
-    Future version of this notebook will fix both the notebook
-    and the auto-grader so that `parameters` is not needed.
-    For now, please include `parameters` in the function signature,
-    and also when invoking this function.]
-
-    Returns:
-    cost -- cross-entropy cost given equation (13)
-
-    """
-
     m = Y.shape[1]  # number of example
 
     # Compute the cross-entropy cost
@@ -183,26 +84,7 @@ def compute_cost(A2, Y, parameters):
     return cost
 
 
-A2, Y_assess, parameters = compute_cost_test_case()
-
-print("cost = " + str(compute_cost(A2, Y_assess, parameters)))
-
-
-# GRADED FUNCTION: backward_propagation
-
 def backward_propagation(parameters, cache, X, Y):
-    """
-    Implement the backward propagation using the instructions above.
-
-    Arguments:
-    parameters -- python dictionary containing our parameters
-    cache -- a dictionary containing "Z1", "A1", "Z2" and "A2".
-    X -- input data of shape (2, number of examples)
-    Y -- "true" labels vector of shape (1, number of examples)
-
-    Returns:
-    grads -- python dictionary containing your gradients with respect to different parameters
-    """
     m = X.shape[1]
 
     # First, retrieve W1 and W2 from the dictionary "parameters".
@@ -230,28 +112,7 @@ def backward_propagation(parameters, cache, X, Y):
     return grads
 
 
-parameters, cache, X_assess, Y_assess = backward_propagation_test_case()
-
-grads = backward_propagation(parameters, cache, X_assess, Y_assess)
-print ("dW1 = "+ str(grads["dW1"]))
-print ("db1 = "+ str(grads["db1"]))
-print ("dW2 = "+ str(grads["dW2"]))
-print ("db2 = "+ str(grads["db2"]))
-
-
-# GRADED FUNCTION: update_parameters
-
 def update_parameters(parameters, grads, learning_rate=1.2):
-    """
-    Updates parameters using the gradient descent update rule given above
-
-    Arguments:
-    parameters -- python dictionary containing your parameters
-    grads -- python dictionary containing your gradients
-
-    Returns:
-    parameters -- python dictionary containing your updated parameters
-    """
     # Retrieve each parameter from the dictionary "parameters"
     W1 = parameters["W1"]
     b1 = parameters["b1"]
@@ -274,34 +135,10 @@ def update_parameters(parameters, grads, learning_rate=1.2):
                   "b1": b1,
                   "W2": W2,
                   "b2": b2}
-
     return parameters
 
 
-parameters, grads = update_parameters_test_case()
-parameters = update_parameters(parameters, grads)
-
-print("W1 = " + str(parameters["W1"]))
-print("b1 = " + str(parameters["b1"]))
-print("W2 = " + str(parameters["W2"]))
-print("b2 = " + str(parameters["b2"]))
-
-
-# GRADED FUNCTION: nn_model
-
 def nn_model(X, Y, n_h, num_iterations=10000, print_cost=False):
-    """
-    Arguments:
-    X -- dataset of shape (2, number of examples)
-    Y -- labels of shape (1, number of examples)
-    n_h -- size of the hidden layer
-    num_iterations -- Number of iterations in gradient descent loop
-    print_cost -- if True, print the cost every 1000 iterations
-
-    Returns:
-    parameters -- parameters learnt by the model. They can then be used to predict.
-    """
-
     np.random.seed(3)
     n_x = layer_sizes(X, Y)[0]
     n_y = layer_sizes(X, Y)[2]
@@ -339,20 +176,7 @@ print("W2 = " + str(parameters["W2"]))
 print("b2 = " + str(parameters["b2"]))
 
 
-# GRADED FUNCTION: predict
-
 def predict(parameters, X):
-    """
-    Using the learned parameters, predicts a class for each example in X
-
-    Arguments:
-    parameters -- python dictionary containing your parameters
-    X -- input data of size (n_x, m)
-
-    Returns
-    predictions -- vector of predictions of our model (red: 0 / blue: 1)
-    """
-
     # Computes probabilities using forward propagation, and classifies to 0/1 using 0.5 as the threshold.
     m = X.shape[1]
     A2, cache = forward_propagation(X, parameters)
@@ -365,14 +189,8 @@ def predict(parameters, X):
         else:
             predictions[0][i] = 1
 
-
+    assert (predictions.shape == (1, m))
     return predictions
-
-
-parameters, X_assess = predict_test_case()
-
-predictions = predict(parameters, X_assess)
-print("predictions mean = " + str(np.mean(predictions)))
 
 
 # Build a model with a n_h-dimensional hidden layer

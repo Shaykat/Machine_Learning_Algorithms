@@ -1,11 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import h5py
-import scipy
-from PIL import Image
-from scipy import ndimage
-from utils import load_dataset, sigmoid, image2vector, initialize_with_zeros, propagate, optimize, predict, model
-import h5py
+from utils import *
 
 
 # Loading the data (cat/non-cat)
