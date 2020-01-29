@@ -42,8 +42,9 @@ def propagate(w, b, X, Y):
 
     # FORWARD PROPAGATION (FROM X TO COST)
     A = sigmoid(np.add(np.dot(w.T, X), b))  # compute activation
-    cost = Y*np.log(A) + np.subtract(1, Y)*np.log(np.subtract(1, A)) # compute cost
-    cost = -np.sum(cost)/m
+    cost = Y * np.log(A) + np.subtract(1, Y) * np.log(np.subtract(1, A)) # compute cost
+    if m > 0:
+        cost = -np.sum(cost)/m
 
     # BACKWARD PROPAGATION (TO FIND GRAD)
     dw = np.dot(X, (A - Y).T)/m

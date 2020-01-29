@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-train = pd.read_csv('./data/real_estate.csv')
+train = pd.read_csv('data/real_estate.csv')
 
 """Save the 'Id' column"""
 train_ID = train['No']
