@@ -1,11 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import h5py
-import scipy
-from PIL import Image
-from scipy import ndimage
-from utils import load_dataset, sigmoid, image2vector, initialize_with_zeros, propagate, optimize, predict, model
-import h5py
+from utils import *
 
 
 # Loading the data (cat/non-cat)
@@ -77,7 +72,7 @@ d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000,
 # Example of a picture that was wrongly classified.
 index = 1
 plt.imshow(test_set_x[:,index].reshape((num_px, num_px, 3)))
-print("y = " + str(test_set_y[0,index]) + ", you predicted that it is a \"" + classes[d["Y_prediction_test"][0,index]].decode("utf-8") +  "\" picture.")
+# print("y = " + str(test_set_y[0,index]) + ", you predicted that it is a \"" + classes[d["Y_prediction_test"][0, index]].decode("utf-8") +  "\" picture.")
 
 
 # Plot learning curve (with costs)

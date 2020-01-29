@@ -42,8 +42,9 @@ def propagate(w, b, X, Y):
 
     # FORWARD PROPAGATION (FROM X TO COST)
     A = sigmoid(np.add(np.dot(w.T, X), b))  # compute activation
-    cost = Y*np.log(A) + np.subtract(1, Y)*np.log(np.subtract(1, A)) # compute cost
-    cost = -np.sum(cost)/m
+    cost = Y * np.log(A) + np.subtract(1, Y) * np.log(np.subtract(1, A)) # compute cost
+    if m > 0:
+        cost = -np.sum(cost)/m
 
     # BACKWARD PROPAGATION (TO FIND GRAD)
     dw = np.dot(X, (A - Y).T)/m
@@ -93,18 +94,6 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
 
 def predict(w, b, X):
-    '''
-    Predict whether the label is 0 or 1 using learned logistic regression parameters (w, b)
-
-    Arguments:
-    w -- weights, a numpy array of size (num_px * num_px * 3, 1)
-    b -- bias, a scalar
-    X -- data of size (num_px * num_px * 3, number of examples)
-
-    Returns:
-    Y_prediction -- a numpy array (vector) containing all predictions (0/1) for the examples in X
-    '''
-
     m = X.shape[1]
     Y_prediction = np.zeros((1, m))
     w = w.reshape(X.shape[0], 1)

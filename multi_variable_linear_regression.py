@@ -16,7 +16,7 @@ n = 2
 
 
 def import_dataset():
-    data = np.array(pd.read_csv("./data/real_estate.csv", header=None).values)
+    data = np.array(pd.read_csv("data/real_estate.csv", header=None).values)
     new_data = data[1:, 0:].astype(np.float32)
     print(data.shape)
 
